@@ -1,52 +1,25 @@
+# app.py
 from flask import Flask, request, jsonify
 from tensorflow.keras.models import load_model
-from PIL import Image, ImageOps
+from tensorflow.keras.preprocessing import image
 import numpy as np
 import io
-import base64
+from PIL import Image
 
 app = Flask(__name__)
-
-# Load model and labels
-model = load_model("Model.h5", compile=False)
-with open("labels.txt", "r") as file:
-    class_names = file.readlines()
-
-# Prediction function
-def classify_image(image):
-    size = (224, 224)
-    image = ImageOps.fit(image, size, Image.Resampling.LANCZOS)
-    image_array = np.asarray(image)
-    normalized_image_array = (image_array.astype(np.float32) / 127.5) - 1
-
-    data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
-    data[0] = normalized_image_array
-
-    prediction = model.predict(data)
-    index = np.argmax(prediction)
-    class_name = class_names[index].strip()
-    confidence_score = float(prediction[0][index])
-    
-    return class_name, confidence_score
-
-@app.route("/", methods=["GET"])
-def home():
-    return "TensorFlow Image Classification API is live!"
+model = load_model("model.h5")
+classes = ['Hoodie', 'Shirt', 'T-shirt', 'Jeans']
 
 @app.route("/predict", methods=["POST"])
 def predict():
     if 'file' not in request.files:
-        return jsonify({"error": "No image file provided"}), 400
-    
-    image_file = request.files["file"]
-    image = Image.open(image_file).convert("RGB")
-    
-    class_name, confidence = classify_image(image)
+        return jsonify({'error': 'No file uploaded'}), 400
 
-    return jsonify({
-        "class": class_name,
-        "confidence": confidence
-    })
+    file = request.files['file']
+    img = Image.open(file).resize((224, 224))  # adjust size as per your model
+    img_array = image.img_to_array(img) / 255.0
+    img_array = np.expand_dims(img_array, axis=0)
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    prediction = model.predict(img_array)[0]
+    class_id = int(np.argmax(prediction))
+    return jsonify({"class": classes[class_id], "confidence": float(np.max(prediction))})
