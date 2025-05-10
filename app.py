@@ -7,7 +7,7 @@ import io
 import os
 
 app = Flask(__name__)
-model = load_model("model.h5")
+model = load_model("Model.h5")
 classes = ['Hoodie', 'Shirt', 'T-shirt', 'Jeans']
 
 @app.route("/")
