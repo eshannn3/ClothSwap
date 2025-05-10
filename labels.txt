@@ -1,4 +1,4 @@
-0 Hoodie
-1 Shirt
-2 T-shirt
-3 Jeans
+Hoodie
+Shirt
+T-shirt
+Jeans
