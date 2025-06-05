@@ -2,12 +2,17 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-# Install system dependencies
+# Install git and git-lfs
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    git-lfs \
     gcc \
     libgomp1 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# Initialize git-lfs
+RUN git lfs install
 
 # Copy requirements first to leverage Docker cache
 COPY requirements.txt .
@@ -16,9 +21,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application
 COPY . .
 
-# Ensure the TensorFlow model file exists
-# If the model file is missing, add it to your project directory
-COPY Model2.h5 /app/Model2.h5
+# Ensure git-lfs files are pulled (if needed)
+RUN git lfs pull || echo "LFS files already present"
 
 # Set environment variable to suppress TensorFlow warnings
 ENV TF_ENABLE_ONEDNN_OPTS=0
