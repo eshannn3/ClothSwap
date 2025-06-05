@@ -18,7 +18,7 @@ def load_model():
     print("Model loaded successfully!")
 
 # Class labels
-class_names = ['Hoodie', 'Shirt', 'T-shirt', 'Jeans']
+class_names = ['Shirt', 'T-Shirt', 'Hoodies', 'Jeans', 'Shorts', 'Kurtas', 'Blazers']
 
 @app.route('/')
 def index():
