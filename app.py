@@ -13,8 +13,7 @@ app = Flask(__name__)
 model = None
 
 def load_model():
-    if not os.path.exists('Model2.h5'):
-        raise FileNotFoundError("The model file 'Model.h5' does not exist.")
+    global model
     model = tf.keras.models.load_model('Model2.h5')
     return model
 
