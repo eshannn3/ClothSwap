@@ -13,9 +13,10 @@ app = Flask(__name__)
 model = None
 
 def load_model():
-    global model
-    model = tf.keras.models.load_model('Model.h5')
-    print("Model loaded successfully!")
+    if not os.path.exists('Model2.h5'):
+        raise FileNotFoundError("The model file 'Model.h5' does not exist.")
+    model = tf.keras.models.load_model('Model2.h5')
+    return model
 
 # Class labels
 class_names = ['Shirt', 'T-Shirt', 'Hoodies', 'Jeans', 'Shorts', 'Kurtas', 'Blazers']
