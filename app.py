@@ -14,11 +14,11 @@ model = None
 
 def load_model():
     global model
-    model = tf.keras.models.load_model('Model2.h5')
+    model = tf.keras.models.load_model('Alone_mod')
     return model
 
 # Class labels
-class_names = ['Shirt', 'T-Shirt', 'Hoodies', 'Jeans', 'Shorts', 'Kurtas', 'Blazers']
+class_names = ['Alone, Not Alone']
 
 @app.route('/')
 def index():
