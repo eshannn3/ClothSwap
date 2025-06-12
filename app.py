@@ -14,7 +14,7 @@ model = None
 
 def load_model():
     global model
-    model = tf.keras.models.load_model('Alone_mod')
+    model = tf.keras.models.load_model('Alone_mod.h5')
     return model
 
 # Class labels
