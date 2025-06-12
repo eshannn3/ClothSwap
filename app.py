@@ -18,7 +18,7 @@ def load_model():
     return model
 
 # Class labels
-class_names = ['Alone,'Not_Alone']
+class_names = ['Alone','Not Alone']
 
 @app.route('/')
 def index():
